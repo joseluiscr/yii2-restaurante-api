@@ -308,7 +308,7 @@ class AlergenoV1Cest
         $I->wantTo("Check deleting an alergeno is not allowed");
         
         $url = 'v1/alergeno/delete';
-        $I->sendDELETE(Url::to(['/v1/alergeno/view', 'id' => 36], true));
+        $I->sendDELETE(Url::to(['/v1/alergeno/view', 'id' => 1], true));
 
         $I->seeResponseCodeIs(404);
         

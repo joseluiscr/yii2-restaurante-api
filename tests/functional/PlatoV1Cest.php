@@ -9,10 +9,10 @@ use app\models\Alergeno;
 use yii\helpers\Url;
 
 /**
- * IngredienteController API functional test.
+ * PlatoController API functional test.
  *
  */
-class IngredienteV1Cest
+class PlatoV1Cest
 {
     /**
      * @param FunctionalTester $I
@@ -127,12 +127,12 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function viewIngredienteNotExist(\FunctionalTester $I)
+    public function viewPlatoNotExist(\FunctionalTester $I)
     {
         
-        $I->wantTo("View a not existing ingrediente");
+        $I->wantTo("View a not existing plato");
         
-        $I->sendGET(Url::to(['/v1/ingrediente/view', 'id' => 36], true));
+        $I->sendGET(Url::to(['/v1/plato/view', 'id' => 36], true));
 
         $I->seeResponseCodeIs(404);
         $I->seeResponseIsJson();
@@ -146,20 +146,20 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function viewIngredienteWithoutDetails(\FunctionalTester $I)
+    public function viewPlatoWithoutDetails(\FunctionalTester $I)
     {
         
-        $I->wantTo("View an ingrediente's data without details");
+        $I->wantTo("View a plato's data without details");
         
-        $I->sendGET(Url::to(['/v1/ingrediente/view', 'id' => 1], true));
+        $I->sendGET(Url::to(['/v1/plato/view', 'id' => 1], true));
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson([
             'id'     => 1,
-            'nombre' => 'ingrediente1',
-            'descripcion' => 'Este es el ingrediente 1',
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
         ]);
         
     }
@@ -167,21 +167,31 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function viewIngredienteAlergenos(\FunctionalTester $I)
+    public function viewPlatoAlergenos(\FunctionalTester $I)
     {
         
-        $I->wantTo("View an ingrediente's data with its alergenos");
+        $I->wantTo("View a plato's data with its alergenos");
         
-        $I->sendGET(Url::to(['/v1/ingrediente/view', 'id' => 1, 'expand' => 'alergenos'], true));
+        $I->sendGET(Url::to(['/v1/plato/view', 'id' => 1, 'expand' => 'alergenos'], true));
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson([
             'id'     => 1,
-            'nombre' => 'ingrediente1',
-            'descripcion' => 'Este es el ingrediente 1',
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
             'alergenos' => [
+                [
+                    'id'=> 1,
+                    'nombre' => 'alergeno1',
+                    'descripcion' => 'Este es el alergeno 1'
+                ],
+                [
+                    'id'=> 2,
+                    'nombre' => 'alergeno2',
+                    'descripcion' => 'Este es el alergeno 2'
+                ],
                 [
                     'id'=> 3,
                     'nombre' => 'alergeno3',
@@ -200,30 +210,73 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function viewIngredientePlatos(\FunctionalTester $I)
+    public function viewPlatoIngredientes(\FunctionalTester $I)
     {
         
-        $I->wantTo("View an ingrediente's data with its platos");
+        $I->wantTo("View a plato's data with its ingredientes");
         
-        $I->sendGET(Url::to(['/v1/ingrediente/view', 'id' => 1, 'expand' => 'platos'], true));
+        $I->sendGET(Url::to(['/v1/plato/view', 'id' => 1, 'expand' => 'ingredientes'], true));
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson([
             'id'     => 1,
-            'nombre' => 'ingrediente1',
-            'descripcion' => 'Este es el ingrediente 1',
-            'platos' => [
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
+            'ingredientes' => [
                 [
                     'id'=> 1,
-                    'nombre' => 'plato1',
-                    'descripcion' => 'Este es el plato 1'
+                    'nombre' => 'ingrediente1',
+                    'descripcion' => 'Este es el ingrediente 1'
                 ],
                 [
                     'id'=> 2,
-                    'nombre' => 'plato2',
-                    'descripcion' => 'Este es el plato 2'
+                    'nombre' => 'ingrediente2',
+                    'descripcion' => 'Este es el ingrediente 2'
+                ],
+                [
+                    'id'=> 3,
+                    'nombre' => 'ingrediente3',
+                    'descripcion' => 'Este es el ingrediente 3'
+                ],
+            ]
+        ]);
+
+    }
+
+    /**
+     * @param FunctionalTester $I
+     */
+    public function viewPlatoIngredientesCambios(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("View changes on plato's ingredientes");
+        
+        $I->sendGET(Url::to(['/v1/plato/view', 'id' => 1, 'expand' => 'platoingredientecambios'], true));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+            'id'     => 1,
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
+            'platoingredientecambios' => [
+                [
+                    'id_plato' => 1, 'id_ingrediente' => 2, 'orden_cambio' => 0, 'accion' => 'anadido',
+                ],
+                [
+                    'id_plato' => 1, 'id_ingrediente' => 3, 'orden_cambio' => 0, 'accion' => 'anadido',
+                ],
+                [
+                    'id_plato' => 1, 'id_ingrediente' => 4, 'orden_cambio' => 0, 'accion' => 'anadido',
+                ],
+                [
+                    'id_plato' => 1, 'id_ingrediente' => 4, 'orden_cambio' => 1, 'accion' => 'eliminado',
+                ],
+                [
+                    'id_plato' => 1, 'id_ingrediente' => 1, 'orden_cambio' => 1, 'accion' => 'anadido',
                 ],
             ]
         ]);
@@ -235,13 +288,13 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function createIngredienteValidation(\FunctionalTester $I)
+    public function createPlatoValidation(\FunctionalTester $I)
     {
         
-        $I->wantTo("Check validations on creating ingrediente");
+        $I->wantTo("Check validations on creating plato");
         
         // nombre obligatorio
-        $I->sendPOST(Url::to('/v1/ingredientes', true), [
+        $I->sendPOST(Url::to('/v1/platos', true), [
             'nombre' => '',
         ]);
         $I->seeResponseCodeIs(422);
@@ -252,7 +305,7 @@ class IngredienteV1Cest
         ]);
 
         // nombre string(30)
-        $I->sendPOST(Url::to('/v1/ingredientes', true), [
+        $I->sendPOST(Url::to('/v1/platos', true), [
             'nombre' => '111111111111111111111111111111111111111111111111111111111111111111111111111',
         ]);
         $I->seeResponseCodeIs(422);
@@ -263,7 +316,7 @@ class IngredienteV1Cest
         ]);
 
         // nombre string(100)
-        $I->sendPOST(Url::to('/v1/ingredientes', true), [
+        $I->sendPOST(Url::to('/v1/platos', true), [
             'descripcion' => '111111111111111111111111111111111111111111111111111111111111111111111111111'.
                         '111111111111111111111111111111111111111111111111111111111111111111111111111'.
                         '111111111111111111111111111111111111111111111111111111111111111111111111111',
@@ -280,22 +333,22 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function createIngrediente(\FunctionalTester $I)
+    public function createPlato(\FunctionalTester $I)
     {
         
-        $I->wantTo("Create an ingrediente");
+        $I->wantTo("Create a plato");
         
-        $I->sendPOST(Url::to('/v1/ingredientes', true), [
-            'nombre' => 'nuevo ingrediente',
-            'descripcion' => 'Este es un nuevo ingrediente'
+        $I->sendPOST(Url::to('/v1/platos', true), [
+            'nombre' => 'nuevo plato',
+            'descripcion' => 'Este es un nuevo plato'
         ]);
 
         $I->seeResponseCodeIs(201);
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson([
-            'nombre' => 'nuevo ingrediente',
-            'descripcion' => 'Este es un nuevo ingrediente',
+            'nombre' => 'nuevo plato',
+            'descripcion' => 'Este es un nuevo plato',
         ]);
         
     }
@@ -305,22 +358,22 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function updateIngrediente(\FunctionalTester $I)
+    public function updatePlato(\FunctionalTester $I)
     {
         
-        $I->wantTo("Update an ingrediente without details");
+        $I->wantTo("Update a plato without details");
         
-        $I->sendPUT(Url::to(['/v1/ingrediente/view','id'=>1], true), [
-            'nombre' => 'ingrediente1mod',
-            'descripcion' => 'Este es el ingrediente 1 modificado'
+        $I->sendPUT(Url::to(['/v1/plato/view','id'=>1], true), [
+            'nombre' => 'plato1mod',
+            'descripcion' => 'Este es el plato 1 modificado'
         ]);
 
         $I->seeResponseCodeIs(200);
         $I->seeResponseIsJson();
         
         $I->seeResponseContainsJson([
-            'nombre' => 'ingrediente1mod',
-            'descripcion' => 'Este es el ingrediente 1 modificado',
+            'nombre' => 'plato1mod',
+            'descripcion' => 'Este es el plato 1 modificado',
         ]);
         
     }
@@ -328,13 +381,13 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function modIngredienteAlergenos(\FunctionalTester $I)
+    public function modPlatoIngredientes(\FunctionalTester $I)
     {
         
-        $I->wantTo("Change an ingrediente's alergenos");
+        $I->wantTo("Change a plato's ingredientes");
         
-        $I->sendPUT(Url::to(['/v1/ingrediente/mod-alergenos', 'id' => 1], true), [
-                'alergenos' => [
+        $I->sendPUT(Url::to(['/v1/plato/mod-ingredientes', 'id' => 1], true), [
+                'ingredientes' => [
                     ['id'=> 2],
                     ['id'=> 3],
                     ['id'=> 5],
@@ -347,23 +400,23 @@ class IngredienteV1Cest
         
         $I->seeResponseContainsJson([
             'id'     => 1,
-            'nombre' => 'ingrediente1',
-            'descripcion' => 'Este es el ingrediente 1',
-            'alergenos' => [
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
+            'ingredientes' => [
                 [
                     'id'=> 2,
-                    'nombre' => 'alergeno2',
-                    'descripcion' => 'Este es el alergeno 2'
+                    'nombre' => 'ingrediente2',
+                    'descripcion' => 'Este es el ingrediente 2'
                 ],
                 [
                     'id'=> 3,
-                    'nombre' => 'alergeno3',
-                    'descripcion' => 'Este es el alergeno 3'
+                    'nombre' => 'ingrediente3',
+                    'descripcion' => 'Este es el ingrediente 3'
                 ],
                 [
                     'id'=> 5,
-                    'nombre' => 'alergeno5',
-                    'descripcion' => 'Este es el alergeno 5'
+                    'nombre' => 'ingrediente5',
+                    'descripcion' => 'Este es el ingrediente 5'
                 ],
             ]
         ]);
@@ -374,13 +427,13 @@ class IngredienteV1Cest
      * @param FunctionalTester $I
      */
     /*
-    public function cleanIngredienteAlergenos(\FunctionalTester $I)
+    public function cleanPlatoIngredientes(\FunctionalTester $I)
     {
         
-        $I->wantTo("Clean an ingrediente's alergenos");
+        $I->wantTo("Clean a plato's ingredientes");
         
-        $I->sendPUT(Url::to(['/v1/ingrediente/mod-alergenos', 'id' => 1], true), [
-                'alergenos' => [[]
+        $I->sendPUT(Url::to(['/v1/plato/mod-ingredientes', 'id' => 1], true), [
+                'ingredientes' => [[]
                 ]
             ]
         );
@@ -390,9 +443,9 @@ class IngredienteV1Cest
         
         $I->seeResponseContainsJson([
             'id'     => 1,
-            'nombre' => 'ingrediente1',
-            'descripcion' => 'Este es el ingrediente 1',
-            'alergenos' => [
+            'nombre' => 'plato1',
+            'descripcion' => 'Este es el plato 1',
+            'ingredientes' => [
             ]
         ]);
 
@@ -404,13 +457,13 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    public function deleteIngredienteNotAllowed(\FunctionalTester $I)
+    public function deletePlatoNotAllowed(\FunctionalTester $I)
     {
         
-        $I->wantTo("Check deleting an ingrediente is not allowed");
+        $I->wantTo("Check deleting a plato is not allowed");
         
-        $url = 'v1/ingrediente/delete';
-        $I->sendDELETE(Url::to(['/v1/ingrediente/view', 'id' => 1], true));
+        $url = 'v1/plato/delete';
+        $I->sendDELETE(Url::to(['/v1/plato/view', 'id' => 1], true));
 
         $I->seeResponseCodeIs(404);
         
