@@ -1,0 +1,207 @@
+COMENTARIOS
+-----------
+- Cumple con el estándar HATEOAS.
+- Diseñado de acuerdo a MVC (sin vistas porque es una API).
+- La API permite sucesivas versiones independientes:
+  + Los controladores y los modelos propios de cada versión están en: app\modules\v1\
+  + Los modelos comunes a todas las versiones están en: app\models\
+
+- Se han utilizado las clases predefinidas de Yii para los modelos (ActiveRecord) y para los controladores (ActiveController).
+- Los modelos de versión heredan de los modelos comunes para aprovechar todos sus atributos y métodos.
+
+
+
+URLs
+----
+
+- Platos
+ + http://localhost:8888/platos/1?expand=ingredientes - GET
+ + http://localhost:8888/platos/2?expand=alergenos - GET
+ + http://localhost:8888/platos/2?expand=platoingredientecambios - GET
+
+ + http://localhost:8888/platos - POST
+    IN:
+    {
+	    "nombre": "plato nuevo",
+	    "descripcion": "Este es un nuevo plato"
+	}
+
+	OUT:
+	{
+	    "nombre": "plato nuevo",
+	    "descripcion": "Este es un nuevo plato",
+	    "id": 4
+	}
+
+ + http://localhost:8888/platos/1 - PUT
+    IN:
+    {
+	    "nombre": "plato1mod",
+	    "descripcion": "Este es el plato 1 modificado"
+	}
+
+	OUT:
+	{
+    "id": 1,
+    "nombre": "plato1mod",
+    "descripcion": "Este es el plato 1 modificado"
+	}
+
+ + http://localhost:8888/platos/3/ingredientes - PUT (modificar los ingredientes de un plato)
+	IN: Nueva lista completa de los ingredientes de un plato
+	{
+     "ingredientes": [
+        {
+            "id": 2
+        },
+        {
+            "id": 5
+        },
+        {
+            "id": 7
+        }
+    ]
+ 	}
+ 	OUT:
+ 	{
+    "id": 3,
+    "nombre": "plato3",
+    "descripcion": "Este es el plato 3",
+    "ingredientes": [
+        {
+            "id": 2,
+            "nombre": "ingrediente2",
+            "descripcion": "Este es el ingrediente 2"
+        },
+        {
+            "id": 5,
+            "nombre": "ingrediente5",
+            "descripcion": "Este es ingrediente 5"
+        },
+        {
+            "id": 7,
+            "nombre": "ingrediente7",
+            "descripcion": "Este es el ingrediente 7"
+        }
+    ]
+	}
+	IN: // Para dejar a un plato sin ingredientes
+	{
+    "ingredientes": []
+ 	}
+ 	OUT:
+ 	{
+	    "id": 3,
+	    "nombre": "plato3",
+	    "descripcion": "Este es el plato 3",
+	    "ingredientes": []
+	}
+
+
+- Ingredientes
+ + http://localhost:8888/ingredientes/1?expand=alergenos - GET
+ + http://localhost:8888/ingredientes/1?expand=platos - GET
+
+ + http://localhost:8888/ingredientes - POST
+    IN:
+    {
+	    "nombre": "ingrediente nuevo",
+	    "descripcion": "Este es un nuevo ingrediente"
+	}
+	OUT:
+	{
+	    "nombre": "ingrediente nuevo",
+	    "descripcion": "Este es un nuevo ingrediente",
+	    "id": 4
+	}
+
+ + http://localhost:8888/ingredientes/1 - PUT
+    IN:
+    {
+	    "nombre": "ingrediente1mod",
+	    "descripcion": "Este es el ingrediente 1 modificado"
+	}
+	OUT:
+	{
+	    "id": 1,
+	    "nombre": "ingrediente1mod",
+	    "descripcion": "Este es ingrediente 1 modificado"
+	}
+
+ + http://localhost:8888/ingredientes/1/alergenos - PUT (modificar los alérgenos de un ingrediente)
+	IN: Nueva lista completa de los alérgenos de un ingrediente
+	{
+    "alergenos": [
+        {
+            "id": 3
+        },
+        {
+            "id": 4
+        }
+    ]
+ 	}
+ 	OUT:
+ 	{
+    "id": 5,
+    "nombre": "ingrediente5",
+    "descripcion": "Este es ingrediente 5",
+    "alergenos": [
+        {
+            "id": 3,
+            "nombre": "alergeno3 mod",
+            "descripcion": "Este es el alérgeno 3 modificado"
+        },
+        {
+            "id": 4,
+            "nombre": "alergeno 4",
+            "descripcion": "Este es el alérgeno 4"
+        }
+    ]
+	}
+
+ 	IN: // Para dejar a un ingrediente sin alérgenos
+	{
+    "alergenos": []
+ 	}
+ 	OUT:
+ 	{
+	    "id": 1,
+	    "nombre": "ingrediente1mod",
+	    "descripcion": "Este es ingrediente 1 modificado",
+	    "alergenos": []
+	}
+
+- Alergenos
+ + http://localhost:8888/alergenos/1?expand=platos - GET
+ + http://localhost:8888/alergenos/1?expand=ingredientes - GET
+
+ + http://localhost:8888/alergenos - POST
+    IN:
+    {
+	    "nombre": "alergeno nuevo",
+	    "descripcion": "Este es un nuevo alergeno"
+	}
+
+	OUT:
+	{
+	    "nombre": "alergeno nuevo",
+	    "descripcion": "Este es un nuevo alergeno",
+	    "id": 4
+	}
+
+
++ http://localhost:8888/alergenos/4 - PUT/PATCH
+
+	IN:
+	{
+	    "nombre": "alergeno 4",
+	    "descripcion": "Este es el alérgeno 4"
+	}
+
+	OUT:
+	{
+	    "id": 4,
+	    "nombre": "alergeno 4",
+	    "descripcion": "Este es el alérgeno 4"
+	}	
+
