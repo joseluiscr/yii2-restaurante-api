@@ -10,8 +10,8 @@
 
 FRAMEWORK
 ---------
-Yii2
-Se han utilizado las clases propias del Framework especialmente adaptadas para el desarrollo de API REST: ActiveRecord como modelos y ActiveController como controladores.
+- Yii2.
+- Se han utilizado las clases propias del Framework especialmente adaptadas para el desarrollo de API REST: ActiveRecord como modelos y ActiveController como controladores.
 
 
 
@@ -32,7 +32,7 @@ ESTRUCTURA
 ----------
 - Modelo. Se ha dividido en 2 partes:
   + app\models --> donde se han incluido las características propias del negocio: validación de campos y relaciones entre los datos.
-  + app\modules\v1\models --> Esta parte se ha incluido para permitir flexibilidad en la presentación de los datos y, por ello, tiene una estructura de versiones.
+  + app\modules\v1\models --> Esta parte controla la presentación de los datos y, por ello, tiene una estructura de versiones.
 
 - Controladores. Se han incluido en la parte versionable (app\modules\v1\controllers) porque son la presentación de los datos.
 
@@ -83,9 +83,10 @@ La base de datos para testing se indica en `config/test_db.php`
 ESTRUCTURA BBDD
 ---------------
 
-Se han creado 3 tablas de catálogo (contienen sólo [id, nombre, descripcion]): alergeno, ingrediente, plato.
-Y 2 tablas para las relaciones entre alergenos-ingredientes e ingredientes-platos, con sus respectivar foreign keys.
-Por último, se ha creado una tabla para guardar los posibles cambios de ingredientes de cada plato (se guarda la receta inicial de cada plato con orden_cambio = 0, y luego los sucesivos cambios con orden_cambio sucesivos).
+- Se han creado 3 tablas de catálogo (contienen sólo [id, nombre, descripcion]):
+    alergeno, ingrediente, plato.
+- Dos tablas para las relaciones entre alergenos-ingredientes e ingredientes-platos, con sus respectivas foreign keys.
+- Por último, se ha creado una tabla para guardar los posibles cambios de ingredientes de cada plato (se guarda la receta inicial de cada plato con orden_cambio = 0, y luego los sucesivos cambios con orden_cambio sucesivos).
 
 
 
@@ -161,22 +162,25 @@ DATOS EJEMPLO
 -------------
 Como ya se ha comentado, se adjuntan unos ficheros para cargar la bbdd; ambos ficheros tienen los mismos datos de ejemplo. Son los siguientes:
 
- alergenos: 1, 2, 3, 4, 5
- ingredientes: 1, 2, 3, 4, 5
- platos: 1, 2, 3
+ - alergenos: 1, 2, 3, 4, 5
+ - ingredientes: 1, 2, 3, 4, 5
+ - platos: 1, 2, 3
 
- ingrediente: 1 => alergenos: 3, 4
-              2 => alergenos: 1, 2
-              3 => alergenos: 1, 3, 4
-              4 => alergenos:  
-              5 => alergenos: 4
+ ingredientes:
+  + 1 => alergenos: 3, 4
+  + 2 => alergenos: 1, 2
+  + 3 => alergenos: 1, 3, 4
+  + 4 => alergenos:  
+  + 5 => alergenos: 4
 
- plato: 1 => alergenos: 1, 2, 3
-        2 => alergenos: 1, 3
-        3 => alergenos: 2, 5
+ platos:
+  + 1 => alergenos: 1, 2, 3
+  + 2 => alergenos: 1, 3
+  + 3 => alergenos: 2, 5
 
  cambios en platos:
-      plato: 1 => ingredientes: [2, 3, 4] => [1, 2, 3]
-             2 => ingredientes: sin cambios
-             3 => ingredientes: [1, 5] => [2, 5]
+      plato:
+        + 1 => ingredientes: [2, 3, 4] => [1, 2, 3]
+        + 2 => ingredientes: sin cambios
+        + 3 => ingredientes: [1, 5] => [2, 5]
 
