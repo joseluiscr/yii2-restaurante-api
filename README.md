@@ -174,9 +174,9 @@ Como ya se ha comentado, se adjuntan unos ficheros para cargar la bbdd; ambos fi
     + 5 => alergenos: 4
 
  - platos:
-    + 1 => alergenos: 1, 2, 3
-    + 2 => alergenos: 1, 3
-    + 3 => alergenos: 2, 5
+    + 1 => ingredientes: 1, 2, 3
+    + 2 => ingredientes: 1, 3
+    + 3 => ingredientes: 2, 5
 
  - cambios en platos:
       + plato:
