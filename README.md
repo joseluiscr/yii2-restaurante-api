@@ -166,21 +166,21 @@ Como ya se ha comentado, se adjuntan unos ficheros para cargar la bbdd; ambos fi
  - ingredientes: 1, 2, 3, 4, 5
  - platos: 1, 2, 3
 
- ingredientes:
-  + 1 => alergenos: 3, 4
-  + 2 => alergenos: 1, 2
-  + 3 => alergenos: 1, 3, 4
-  + 4 => alergenos:  
-  + 5 => alergenos: 4
+ - ingredientes:
+    + 1 => alergenos: 3, 4
+    + 2 => alergenos: 1, 2
+    + 3 => alergenos: 1, 3, 4
+    + 4 => alergenos:  
+    + 5 => alergenos: 4
 
- platos:
-  + 1 => alergenos: 1, 2, 3
-  + 2 => alergenos: 1, 3
-  + 3 => alergenos: 2, 5
+ - platos:
+    + 1 => alergenos: 1, 2, 3
+    + 2 => alergenos: 1, 3
+    + 3 => alergenos: 2, 5
 
- cambios en platos:
-      plato:
-        + 1 => ingredientes: [2, 3, 4] => [1, 2, 3]
-        + 2 => ingredientes: sin cambios
-        + 3 => ingredientes: [1, 5] => [2, 5]
+ - cambios en platos:
+      + plato:
+        * 1 => ingredientes: [2, 3, 4] => [1, 2, 3]
+        * 2 => ingredientes: sin cambios
+        * 3 => ingredientes: [1, 5] => [2, 5]
 
