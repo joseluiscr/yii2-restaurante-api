@@ -112,7 +112,7 @@ class AlergenoV1Cest
     public function _after(\FunctionalTester $I)
     {
         // Limpiar la BBDD después de terminar el test
-          // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+          // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();

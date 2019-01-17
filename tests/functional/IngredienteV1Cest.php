@@ -122,7 +122,7 @@ class IngredienteV1Cest
 
     }
 
-        /* Index action
+    /* Index action
     --------------------------------------------------------------- */
     /**
      * @param FunctionalTester $I
