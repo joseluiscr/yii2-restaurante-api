@@ -20,7 +20,7 @@ class AlergenoV1Cest
     public function _before(\FunctionalTester $I)
     {
         // Limpiar la BBDD antes de empezar el test
-            // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+            // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();
@@ -122,6 +122,52 @@ class AlergenoV1Cest
 
     }
 
+    /* Index action
+    --------------------------------------------------------------- */
+    /**
+     * @param FunctionalTester $I
+     */
+    public function indexAlergenos(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("View complete list of all alergenos");
+        
+        $I->sendGET(Url::to(['/v1/alergeno/index'], true));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+                [
+                    'id'=> 1,
+                    'nombre' => 'alergeno1',
+                    'descripcion' => 'Este es el alergeno 1'
+                ],
+                [
+                    'id'=> 2,
+                    'nombre' => 'alergeno2',
+                    'descripcion' => 'Este es el alergeno 2'
+                ],
+                [
+                    'id'=> 3,
+                    'nombre' => 'alergeno3',
+                    'descripcion' => 'Este es el alergeno 3'
+                ],
+                [
+                    'id'=> 4,
+                    'nombre' => 'alergeno4',
+                    'descripcion' => 'Este es el alergeno 4'
+                ],
+                [
+                    'id'=> 5,
+                    'nombre' => 'alergeno5',
+                    'descripcion' => 'Este es el alergeno 5'
+                ],
+        ]);
+        
+    }
+
+
     /* View action
     --------------------------------------------------------------- */
     /**
@@ -162,6 +208,39 @@ class AlergenoV1Cest
             'descripcion' => 'Este es el alergeno 1',
         ]);
         
+    }
+
+    /**
+     * @param FunctionalTester $I
+     */
+    public function viewAlergenoIngredientes(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("View an alergeno's data with its ingredientes");
+        
+        $I->sendGET(Url::to(['/v1/alergeno/view', 'id' => 1, 'expand' => 'ingredientes'], true));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+            'id'     => 1,
+            'nombre' => 'alergeno1',
+            'descripcion' => 'Este es el alergeno 1',
+            'ingredientes' => [
+                [
+                    'id'=> 2,
+                    'nombre' => 'ingrediente2',
+                    'descripcion' => 'Este es el ingrediente 2'
+                ],
+                [
+                    'id'=> 3,
+                    'nombre' => 'ingrediente3',
+                    'descripcion' => 'Este es el ingrediente 3'
+                ],
+            ]
+        ]);
+
     }
 
     /**

@@ -20,7 +20,7 @@ class IngredienteV1Cest
     public function _before(\FunctionalTester $I)
     {
         // Limpiar la BBDD antes de empezar el test
-            // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+            // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();
@@ -112,7 +112,7 @@ class IngredienteV1Cest
     public function _after(\FunctionalTester $I)
     {
         // Limpiar la BBDD después de terminar el test
-          // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+          // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();
@@ -120,6 +120,51 @@ class IngredienteV1Cest
         Ingrediente::deleteAll();
         Alergeno::deleteAll();
 
+    }
+
+        /* Index action
+    --------------------------------------------------------------- */
+    /**
+     * @param FunctionalTester $I
+     */
+    public function indexIngredientes(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("View complete list of all ingredientes");
+        
+        $I->sendGET(Url::to(['/v1/ingrediente/index'], true));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+                [
+                    'id'=> 1,
+                    'nombre' => 'ingrediente1',
+                    'descripcion' => 'Este es el ingrediente 1'
+                ],
+                [
+                    'id'=> 2,
+                    'nombre' => 'ingrediente2',
+                    'descripcion' => 'Este es el ingrediente 2'
+                ],
+                [
+                    'id'=> 3,
+                    'nombre' => 'ingrediente3',
+                    'descripcion' => 'Este es el ingrediente 3'
+                ],
+                [
+                    'id'=> 4,
+                    'nombre' => 'ingrediente4',
+                    'descripcion' => 'Este es el ingrediente 4'
+                ],
+                [
+                    'id'=> 5,
+                    'nombre' => 'ingrediente5',
+                    'descripcion' => 'Este es el ingrediente 5'
+                ],
+        ]);
+        
     }
 
     /* View action

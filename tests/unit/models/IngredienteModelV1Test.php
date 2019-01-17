@@ -16,7 +16,7 @@ class IngredienteModelV1Test extends \Codeception\Test\Unit
     public function _before()
     {
         // Limpiar la BBDD antes de empezar el test
-            // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+            // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();

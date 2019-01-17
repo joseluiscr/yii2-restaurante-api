@@ -2,115 +2,69 @@
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
     </a>
-    <h1 align="center">Yii 2 Basic Project Template</h1>
+    <h1 align="center">Yii2 restaurante API</h1>
     <br>
 </p>
 
-Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-rapidly creating small projects.
 
-The template contains the basic features including user login/logout and a contact page.
-It includes all commonly used configurations that would allow you to focus on adding new
-features to your application.
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-basic.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-basic)
-
-DIRECTORY STRUCTURE
--------------------
-
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
+FRAMEWORK
+---------
+Yii2
+Se han utilizado las clases propias del Framework especialmente adaptadas para el desarrollo de API REST: ActiveRecord como modelos y ActiveController como controladores.
 
 
 
-REQUIREMENTS
-------------
+DISEÑO
+------
+- Cumple con el estándar HATEOAS (en las respuestas de la API se devuelven los links a los recursos relacionados).
+- Diseñado de acuerdo a MVC (sin vistas porque es una API).
+- La API permite sucesivas versiones:
+  + Los controladores y los modelos propios de cada versión están en: app\modules\v{i}\ (app\modules\v1\ para la versión 1)
+  + Los modelos comunes a todas las versiones están en: app\models\
 
-The minimum requirement by this project template that your Web server supports PHP 5.4.0.
-
-
-INSTALLATION
-------------
-
-### Install via Composer
-
-If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-You can then install this project template using the following command:
-
-~~~
-php composer.phar create-project --prefer-dist --stability=dev yiisoft/yii2-app-basic basic
-~~~
-
-Now you should be able to access the application through the following URL, assuming `basic` is the directory
-directly under the Web root.
-
-~~~
-http://localhost/basic/web/
-~~~
-
-### Install from an Archive File
-
-Extract the archive file downloaded from [yiiframework.com](http://www.yiiframework.com/download/) to
-a directory named `basic` that is directly under the Web root.
-
-Set cookie validation key in `config/web.php` file to some random secret string:
-
-```php
-'request' => [
-    // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-    'cookieValidationKey' => '<secret random string goes here>',
-],
-```
-
-You can then access the application through the following URL:
-
-~~~
-http://localhost/basic/web/
-~~~
+- Se han utilizado las clases predefinidas de Yii para los modelos (ActiveRecord) y para los controladores (ActiveController).
+- Los modelos de versión heredan de los modelos comunes para aprovechar todos sus atributos y métodos.
 
 
-### Install with Docker
 
-Update your vendor packages
+ESTRUCTURA
+----------
+- Modelo. Se ha dividido en 2 partes:
+  + app\models --> donde se han incluido las características propias del negocio: validación de campos y relaciones entre los datos.
+  + app\modules\v1\models --> Esta parte se ha incluido para permitir flexibilidad en la presentación de los datos y, por ello, tiene una estructura de versiones.
 
-    docker-compose run --rm php composer update --prefer-dist
-    
-Run the installation triggers (creating cookie validation code)
-
-    docker-compose run --rm php composer install    
-    
-Start the container
-
-    docker-compose up -d
-    
-You can then access the application through the following URL:
-
-    http://127.0.0.1:8000
-
-**NOTES:** 
-- Minimum required Docker engine version `17.04` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
-- The default configuration uses a host-volume in your home directory `.docker-composer` for composer caches
+- Controladores. Se han incluido en la parte versionable (app\modules\v1\controllers) porque son la presentación de los datos.
 
 
-CONFIGURATION
+
+ARBOL DE DIRECTORIOS
+--------------------
+
+      config/             configuración de la aplicación
+      controllers/        controladores (contiene sólo el controlador por defecto)
+      documentacion/      ejemplos de uso de la api y archivos sql para crear la bbdd
+      models/             clases de modelos propias de negocio
+      modules/            clases de modelos y controladores propios de cada versión
+      tests/              test unitarios y funcionales
+
+
+
+DOCUMENTACIÓN
+-------------
+En el directorio documentación se pueden encontrar:
+- API_urls.txt --> fichero con ejemplos de las urls con sus entradas y salidas.
+- restaurante_tablas_condatos.sql --> fichero sql para crear la bbdd (incluye la carga de unos datos de ejemplo en las tablas).
+- restaurante_solodatos.sql --> fichero sql con los datos de ejemplo.
+
+
+
+CONFIGURACIÓN
 -------------
 
 ### Database
 
-Edit the file `config/db.php` with real data, for example:
+Editar el archivo `config/db.php` para incluir los datos de conexión a base de datos:
 
 ```php
 return [
@@ -122,112 +76,107 @@ return [
 ];
 ```
 
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-- Check and edit the other files in the `config/` directory to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to basic application tests.
+La base de datos para testing se indica en `config/test_db.php`
+
+
+
+ESTRUCTURA BBDD
+---------------
+
+Se han creado 3 tablas de catálogo (contienen sólo [id, nombre, descripcion]): alergeno, ingrediente, plato.
+Y 2 tablas para las relaciones entre alergenos-ingredientes e ingredientes-platos, con sus respectivar foreign keys.
+Por último, se ha creado una tabla para guardar los posibles cambios de ingredientes de cada plato (se guarda la receta inicial de cada plato con orden_cambio = 0, y luego los sucesivos cambios con orden_cambio sucesivos).
+
+
+
+FUNCIONAMIENTO DE LA API
+------------------------
+No se permite borrar ni alérgenos, ni ingredientes, ni platos de sus catálogos respectivos.
+
+- Alérgenos:
+  + Consultar la lista completa de alérgenos.
+      http://localhost:8888/alergenos - GET
+  + Consultar los datos de un alérgeno concreto, incluidos los ingredientes y platos en que se encuentra.
+      http://localhost:8888/alergenos/1
+      http://localhost:8888/alergenos/1?expand=platos - GET
+      http://localhost:8888/alergenos/1?expand=ingredientes - GET
+  + Crear un alérgeno nuevo.
+      http://localhost:8888/alergenos - POST
+  + Modificar un alérgeno.
+      http://localhost:8888/alergenos/1 - PUT
+
+- Ingredientes:
+  + Consultar la lista completa de ingredientes.
+      http://localhost:8888/ingredientes - GET
+  + Consultar los datos de un ingrediente concreto, incluidos los alérgenos que tiene y los platos en que se encuentra.
+      http://localhost:8888/ingredientes/1
+      http://localhost:8888/ingredientes/1?expand=alergenos - GET
+      http://localhost:8888/ingredientes/1?expand=platos - GET
+  + Crear un ingrediente nuevo.
+      http://localhost:8888/ingredientes - POST
+  + Modificar un ingrediente.
+      http://localhost:8888/ingredientes/1 - PUT
+  + Generar y modificar la lista de alérgenos de un ingrediente.
+      http://localhost:8888/ingredientes/1/alergenos - PUT
+
+- Platos:
+  + Consultar la lista completa de platos.
+      http://localhost:8888/platos - GET
+  + Consultar los datos de un plato concreto, incluidos los alérgenos que tiene y los ingredientes que tiene.
+      http://localhost:8888/platos/1
+      http://localhost:8888/platos/1?expand=ingredientes - GET
+      http://localhost:8888/platos/1?expand=alergenos - GET
+  + Consultar los cambios de ingredientes que ha habido en un plato.
+      http://localhost:8888/platos/1?expand=platoingredientecambios - GET
+  + Crear un plato nuevo.
+      http://localhost:8888/platos - POST
+  + Modificar un plato.
+      http://localhost:8888/platos/1 - PUT
+  + Generar y modificar la lista de ingredientes de un plato.
+      http://localhost:8888/platos/1/ingredientes - PUT
+
+
 
 
 TESTING
 -------
 
-Tests are located in `tests` directory. They are developed with [Codeception PHP Testing Framework](http://codeception.com/).
-By default there are 3 test suites:
+Los tests automáticos están en el directorio `tests`. Han sido desarrollados con [Codeception PHP Testing Framework](http://codeception.com/).
+Hay 2 conjuntos de pruebas:
 
 - `unit`
 - `functional`
-- `acceptance`
 
-Tests can be executed by running
+Los tests se pueden ejecutar con el comando:
 
 ```
 vendor/bin/codecept run
 ```
 
-The command above will execute unit and functional tests. Unit tests are testing the system components, while functional
-tests are for testing user interaction. Acceptance tests are disabled by default as they require additional setup since
-they perform testing in real browser. 
+Sólo se han incluido test unitarios y funcionales.
 
 
-### Running  acceptance tests
 
-To execute acceptance tests do the following:  
+DATOS EJEMPLO
+-------------
+Como ya se ha comentado, se adjuntan unos ficheros para cargar la bbdd; ambos ficheros tienen los mismos datos de ejemplo. Son los siguientes:
 
-1. Rename `tests/acceptance.suite.yml.example` to `tests/acceptance.suite.yml` to enable suite configuration
+ alergenos: 1, 2, 3, 4, 5
+ ingredientes: 1, 2, 3, 4, 5
+ platos: 1, 2, 3
 
-2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full featured
-   version of Codeception
+ ingrediente: 1 => alergenos: 3, 4
+              2 => alergenos: 1, 2
+              3 => alergenos: 1, 3, 4
+              4 => alergenos:  
+              5 => alergenos: 4
 
-3. Update dependencies with Composer 
+ plato: 1 => alergenos: 1, 2, 3
+        2 => alergenos: 1, 3
+        3 => alergenos: 2, 5
 
-    ```
-    composer update  
-    ```
+ cambios en platos:
+      plato: 1 => ingredientes: [2, 3, 4] => [1, 2, 3]
+             2 => ingredientes: sin cambios
+             3 => ingredientes: [1, 5] => [2, 5]
 
-4. Download [Selenium Server](http://www.seleniumhq.org/download/) and launch it:
-
-    ```
-    java -jar ~/selenium-server-standalone-x.xx.x.jar
-    ```
-
-    In case of using Selenium Server 3.0 with Firefox browser since v48 or Google Chrome since v53 you must download [GeckoDriver](https://github.com/mozilla/geckodriver/releases) or [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and launch Selenium with it:
-
-    ```
-    # for Firefox
-    java -jar -Dwebdriver.gecko.driver=~/geckodriver ~/selenium-server-standalone-3.xx.x.jar
-    
-    # for Google Chrome
-    java -jar -Dwebdriver.chrome.driver=~/chromedriver ~/selenium-server-standalone-3.xx.x.jar
-    ``` 
-    
-    As an alternative way you can use already configured Docker container with older versions of Selenium and Firefox:
-    
-    ```
-    docker run --net=host selenium/standalone-firefox:2.53.0
-    ```
-
-5. (Optional) Create `yii2_basic_tests` database and update it by applying migrations if you have them.
-
-   ```
-   tests/bin/yii migrate
-   ```
-
-   The database configuration can be found at `config/test_db.php`.
-
-
-6. Start web server:
-
-    ```
-    tests/bin/yii serve
-    ```
-
-7. Now you can run all available tests
-
-   ```
-   # run all available tests
-   vendor/bin/codecept run
-
-   # run acceptance tests
-   vendor/bin/codecept run acceptance
-
-   # run only unit and functional tests
-   vendor/bin/codecept run unit,functional
-   ```
-
-### Code coverage support
-
-By default, code coverage is disabled in `codeception.yml` configuration file, you should uncomment needed rows to be able
-to collect code coverage. You can run your tests and collect coverage with the following command:
-
-```
-#collect coverage for all tests
-vendor/bin/codecept run -- --coverage-html --coverage-xml
-
-#collect coverage only for unit tests
-vendor/bin/codecept run unit -- --coverage-html --coverage-xml
-
-#collect coverage for unit and functional tests
-vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
-```
-
-You can see code coverage output under the `tests/_output` directory.

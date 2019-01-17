@@ -20,7 +20,7 @@ class PlatoV1Cest
     public function _before(\FunctionalTester $I)
     {
         // Limpiar la BBDD antes de empezar el test
-            // Lo hago con los ActiveRecord porque no sé hacerlo con fixtures
+            // Lo hago con los ActiveRecord porque no he podido hacerlo con fixtures
         PlatoIngredienteCambio::deleteAll();
         PlatoIngrediente::deleteAll();
         IngrAlergeno::deleteAll();
@@ -120,6 +120,41 @@ class PlatoV1Cest
         Ingrediente::deleteAll();
         Alergeno::deleteAll();
 
+    }
+
+    /* Index action
+    --------------------------------------------------------------- */
+    /**
+     * @param FunctionalTester $I
+     */
+    public function indexPlatos(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("View complete list of all platos");
+        
+        $I->sendGET(Url::to(['/v1/plato/index'], true));
+
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+                [
+                    'id'=> 1,
+                    'nombre' => 'plato1',
+                    'descripcion' => 'Este es el plato 1'
+                ],
+                [
+                    'id'=> 2,
+                    'nombre' => 'plato2',
+                    'descripcion' => 'Este es el plato 2'
+                ],
+                [
+                    'id'=> 3,
+                    'nombre' => 'plato3',
+                    'descripcion' => 'Este es el plato 3'
+                ],
+        ]);
+        
     }
 
     /* View action
