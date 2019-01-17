@@ -45,7 +45,7 @@ ARBOL DE DIRECTORIOS
       controllers/        controladores (contiene sólo el controlador por defecto)
       documentacion/      ejemplos de uso de la api y archivos sql para crear la bbdd
       models/             clases de modelos propias de negocio
-      modules/            clases de modelos y controladores propios de cada versión
+      modules/v1/         clases de modelos y controladores propios de cada versión
       tests/              test unitarios y funcionales
 
 
