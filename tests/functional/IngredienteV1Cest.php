@@ -373,6 +373,26 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
+    public function modIngrAlergenosValidation(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("Check validations on modifying ingrediente's alergenos: alergenos param is mandatory");
+        
+        $I->sendPUT(Url::to(['/v1/ingrediente/mod-alergenos', 'id' => 1], true)
+        );
+
+        $I->seeResponseCodeIs(400);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+            'message' => 'The alergenos body param is mandatory'
+        ]);
+
+    }
+
+    /**
+     * @param FunctionalTester $I
+     */
     public function modIngredienteAlergenos(\FunctionalTester $I)
     {
         
@@ -418,14 +438,13 @@ class IngredienteV1Cest
     /**
      * @param FunctionalTester $I
      */
-    /*
     public function cleanIngredienteAlergenos(\FunctionalTester $I)
     {
         
-        $I->wantTo("Clean an ingrediente's alergenos");
+        $I->wantTo("Remove all alergenos from an ingrediente");
         
         $I->sendPUT(Url::to(['/v1/ingrediente/mod-alergenos', 'id' => 1], true), [
-                'alergenos' => [[]
+                'alergenos' => [''
                 ]
             ]
         );
@@ -442,8 +461,7 @@ class IngredienteV1Cest
         ]);
 
     }
-    */
-
+    
     /* Delete action
     --------------------------------------------------------------- */
     /**

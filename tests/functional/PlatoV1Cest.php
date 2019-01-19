@@ -416,6 +416,26 @@ class PlatoV1Cest
     /**
      * @param FunctionalTester $I
      */
+    public function modPlatoIngredientesValidation(\FunctionalTester $I)
+    {
+        
+        $I->wantTo("Check validations on modifying plato's ingredientes: ingredientes param is mandatory");
+        
+        $I->sendPUT(Url::to(['/v1/plato/mod-ingredientes', 'id' => 1], true)
+        );
+
+        $I->seeResponseCodeIs(400);
+        $I->seeResponseIsJson();
+        
+        $I->seeResponseContainsJson([
+            'message' => 'The ingredientes body param is mandatory'
+        ]);
+
+    }
+
+    /**
+     * @param FunctionalTester $I
+     */
     public function modPlatoIngredientes(\FunctionalTester $I)
     {
         
@@ -461,14 +481,13 @@ class PlatoV1Cest
     /**
      * @param FunctionalTester $I
      */
-    /*
     public function cleanPlatoIngredientes(\FunctionalTester $I)
     {
         
-        $I->wantTo("Clean a plato's ingredientes");
+        $I->wantTo("Remove all ingredientes from a plato");
         
         $I->sendPUT(Url::to(['/v1/plato/mod-ingredientes', 'id' => 1], true), [
-                'ingredientes' => [[]
+                'ingredientes' => [''
                 ]
             ]
         );
@@ -485,7 +504,6 @@ class PlatoV1Cest
         ]);
 
     }
-    */
 
     /* Delete action
     --------------------------------------------------------------- */
